@@ -23,7 +23,7 @@ public interface AudioDao {
     Observable<AudioModel> getAudioById(int id);
 
 
-    @Query("SELECT * FROM AudioModel Order by id DESC")
+    @Query("SELECT * FROM AudioModel Order by id ASC")
     Single<List<AudioModel>> getAllAudios();
 
 }

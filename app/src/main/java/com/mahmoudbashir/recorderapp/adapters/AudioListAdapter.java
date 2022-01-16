@@ -1,10 +1,12 @@
 package com.mahmoudbashir.recorderapp.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mahmoudbashir.recorderapp.R;
 import com.mahmoudbashir.recorderapp.model.AudioModel;
@@ -17,12 +19,17 @@ import androidx.recyclerview.widget.RecyclerView;
 public class AudioListAdapter extends RecyclerView.Adapter<AudioListAdapter.ViewHolder> {
 
     Context context;
+    private List<AudioModel> mlist;
+    OnClickItemInterface onClickItemInterface;
 
-    public AudioListAdapter(Context context) {
+
+    public AudioListAdapter(Context context,List<AudioModel> audioList,OnClickItemInterface onClickItemInterface) {
         this.context = context;
+        this.mlist = audioList;
+        this.onClickItemInterface = onClickItemInterface;
     }
 
-    private List<AudioModel> mlist;
+
     public void updateList(List<AudioModel> modelList){
         this.mlist = modelList;
         notifyDataSetChanged();
@@ -38,6 +45,11 @@ public class AudioListAdapter extends RecyclerView.Adapter<AudioListAdapter.View
         AudioModel item = mlist.get(position);
 
         holder.txt_title.setText(item.getAudioName()+"");
+        holder.txt_date.setText(item.getAudioDate());
+        Log.d("audiosLog : ","id : "+item.getId()+" name :"+item.getAudioName()+" path:"+item.getPathName());
+        holder.itemView.setOnClickListener(v -> {
+            onClickItemInterface.onClick(item,position);
+        });
 
     }
 
@@ -47,10 +59,15 @@ public class AudioListAdapter extends RecyclerView.Adapter<AudioListAdapter.View
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView txt_title;
+        TextView txt_title,txt_date;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txt_title = itemView.findViewById(R.id.txt_title);
+            txt_date = itemView.findViewById(R.id.txt_date);
         }
+    }
+
+    public interface OnClickItemInterface{
+        void onClick(AudioModel audioModel , int position);
     }
 }

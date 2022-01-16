@@ -8,32 +8,33 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.github.znacloud.RippleView;
 import com.mahmoudbashir.recorderapp.model.AudioModel;
 import com.mahmoudbashir.recorderapp.viewModel.ViewModel;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Random;
 
 public class RecorderActivity extends AppCompatActivity {
 
@@ -47,6 +48,8 @@ public class RecorderActivity extends AppCompatActivity {
 
    // private PlayButton   playButton = null;
     private MediaPlayer player = null;
+
+    private Chronometer timer;
 
     // Requesting permission to RECORD_AUDIO
     private boolean permissionToRecordAccepted = false;
@@ -113,11 +116,15 @@ public class RecorderActivity extends AppCompatActivity {
     }*/
 
 
+    AlertDialog dialog;
     ImageView record_btn;
+    TextView counter_timer_tv;
     boolean mStartPlaying = true;
     boolean mStartRecording = true;
     Button btn_playRecentRecord;
+    RippleView btn_ripple_v;
     ViewModel audioVM;
+    String curr_time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,8 +134,9 @@ public class RecorderActivity extends AppCompatActivity {
         doInitialize();
 
         // Record to the external cache directory for visibility
-        fileName = getExternalCacheDir().getAbsolutePath();
-        fileName += "/audiorecordtest.3gp";
+        //fileName = getExternalCacheDir().getAbsolutePath();
+
+
 
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
@@ -159,7 +167,7 @@ public class RecorderActivity extends AppCompatActivity {
 
         btn_playRecentRecord.setOnClickListener(v -> {
 
-            startActivity(new Intent(RecorderActivity.this,FirstFragment.class));
+            startActivity(new Intent(RecorderActivity.this, RecorderListActivity.class));
 
             /*audioVM.getAllAudios().observe(this, new Observer<List<AudioModel>>() {
                 @Override
@@ -185,8 +193,13 @@ public class RecorderActivity extends AppCompatActivity {
     }
 
     public void doInitialize(){
+
         record_btn = findViewById(R.id.record_btn);
+        timer = findViewById(R.id.record_timer);
         btn_playRecentRecord = findViewById(R.id.btn_playRecentRecord);
+        btn_ripple_v = findViewById(R.id.btn_ripple_v);
+        btn_ripple_v.setVisibility(View.GONE);
+
         audioVM = ViewModelProviders.of(this).get(ViewModel.class);
     }
 
@@ -209,9 +222,11 @@ public class RecorderActivity extends AppCompatActivity {
         if (start) {
             startRecording();
             record_btn.setImageResource(R.drawable.ic_stop_recording);
+            btn_ripple_v.setVisibility(View.VISIBLE);
         } else {
             stopRecording();
             record_btn.setImageResource(R.drawable.rec_icon1);
+            btn_ripple_v.setVisibility(View.GONE);
         }
     }
 
@@ -242,42 +257,90 @@ public class RecorderActivity extends AppCompatActivity {
         }
 
         private void startRecording(){
+            // Record to the external cache directory for visibility
+            fileName = getExternalCacheDir().getAbsolutePath();
+
+            String timeStamp = String.valueOf(System.currentTimeMillis());
+            fileName += "/audiorecord"+timeStamp+".3gp";
+            curr_time = timeStamp;
+
             recorder = new MediaRecorder();
             recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
             recorder.setOutputFile(fileName);
             recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
+            timer.setBase(SystemClock.elapsedRealtime());
+            timer.start();
             try {
                 recorder.prepare();
+                recorder.start();
             } catch (IOException e) {
                 Log.e(TAG, "prepare() failed");
             }
 
-            recorder.start();
+
         }
 
         private void stopRecording(){
-            recorder.stop();
-            recorder.release();
-            recorder = null;
-            AudioModel model = new AudioModel(1,"firstAudio",fileName);
-            audioVM.insertAudio(model).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).subscribe(new CompletableObserver() {
-                @Override
-                public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+            timer.stop();
+            timer.setBase(SystemClock.elapsedRealtime());
 
-                }
+            Log.d("timerM : ",timer.getFormat()+"");
 
-                @Override
-                public void onComplete() {
-                    showToast("Record saved successfully!");
-                }
+            byte[] array = new byte[7]; // length is bounded by 7
+            new Random().nextBytes(array);
+            String generatedString = new String(array, StandardCharsets.UTF_8);
+            String audName = "AUD"+curr_time;
 
-                @Override
-                public void onError(@io.reactivex.annotations.NonNull Throwable e) {
-                    showToast("some errors !"+e.getMessage());
-                }
-            });
+            try{
+                recorder.stop();
+                recorder.release();
+                recorder = null;
+            }catch (Exception e){
+                Log.e(TAG,"stopped failed"+e);
+            }
+
+            //Get current date and time
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+            Date now = new Date();
+
+            showDialogToSaveNewRecord(audName,fileName,formatter.format(now));
         }
 
+    private void showDialogToSaveNewRecord(String audName,String flname,String audDate) {
+        dialog =new  AlertDialog.Builder(this)
+                .setTitle("Saving "+audName)
+                .setMessage("Are you sure to save this new Record?")
+                .setNegativeButton("Cancel",(dialog1, which) ->
+                {
+                    dialog1.dismiss();
+                }).setPositiveButton("Ok",(dialog1, which) -> {
+                    AudioModel model = new AudioModel();
+                    model.setAudioName(audName);
+                    model.setPathName(flname);
+                    model.setAudioDate(audDate);
+
+                    audioVM.insertAudio(model).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).subscribe(new CompletableObserver() {
+                        @Override
+                        public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            showToast("Record saved successfully!");
+                            dialog1.dismiss();
+                        }
+
+                        @Override
+                        public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+                            showToast("some errors !"+e.getMessage());
+                        }
+                    });
+                })
+                .setCancelable(false)
+                .create();
+        dialog.show();
+    }
 }

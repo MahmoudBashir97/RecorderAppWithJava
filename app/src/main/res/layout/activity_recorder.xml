@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RecorderActivity">
+    tools:context=".RecorderActivity"
+    android:background="#FAFBFF">
 
 
     <RelativeLayout
@@ -13,11 +14,29 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         >
+
+        <com.github.znacloud.RippleView
+            android:id="@+id/btn_ripple_v"
+            android:layout_width="210dp"
+            android:layout_height="210dp"
+            android:layout_centerInParent="true"
+            app:text=""
+            app:textColor="@color/white"
+            app:textSize="22sp"
+            app:circleColor="@color/circle_state_color"
+            app:ringColor="@color/circle_ring_color"
+            app:bdWidth="10dp"
+            app:bdColor="@color/circle_ring_color"
+            app:shadowRadius="8dp"
+            />
+
+
         <RelativeLayout
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:background="@drawable/circle_first_back"
             android:layout_centerInParent="true"
+            android:visibility="visible"
             >
             <RelativeLayout
                 android:layout_width="100dp"
@@ -35,14 +54,42 @@
         </RelativeLayout>
 
 
+        <Button
+            android:id="@+id/btn_playRecentRecord"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ic_baseline_menu_24"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="25dp"
+            android:layout_marginLeft="25dp"
+            />
     </RelativeLayout>
 
 
-
-    <Button
-        android:id="@+id/btn_playRecentRecord"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_play_audio"
-        />
+        android:layout_alignParentBottom="true"
+        android:layout_margin="50dp">
+        <!--<TextView
+            android:id="@+id/counter_timer_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0:00"
+            android:textColor="@color/black"
+            android:textSize="50sp"
+            android:layout_centerInParent="true"
+            android:layout_margin="50dp"/>-->
+        <Chronometer
+            android:id="@+id/record_timer"
+            android:layout_marginTop="64dp"
+            android:fontFamily="@font/open_sans_light"
+            android:textSize="64sp"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
 </RelativeLayout>

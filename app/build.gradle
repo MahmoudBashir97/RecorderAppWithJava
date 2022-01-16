@@ -60,5 +60,9 @@ dependencies {
     implementation 'com.netflix.rxjava:rxjava-android:0.20.5'
 
 
+    //Ripple View
+    implementation 'com.github.znacloud:rippleview:1.0.0'
+
+
 
 }

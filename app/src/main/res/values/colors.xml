@@ -8,4 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#A39696</color>
+    <color name="ring_state_color">#A68AD8</color>
+    <color name="circle_state_color">#80283997</color>
+    <color name="circle_first_state_color">#807282DD</color>
+    <color name="circle_ring_color">#283997</color>
+
 </resources>
