@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
             // setbackgroundcolor method will change
             // the background color of text view.
-            stopTV.setBackgroundColor(getResources().getColor(R.color.purple_200));
+            stopTV.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             startTV.setBackgroundColor(getResources().getColor(R.color.gray));
             playTV.setBackgroundColor(getResources().getColor(R.color.gray));
             stopplayTV.setBackgroundColor(getResources().getColor(R.color.gray));
@@ -197,9 +197,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void playAudio() {
         stopTV.setBackgroundColor(getResources().getColor(R.color.gray));
-        startTV.setBackgroundColor(getResources().getColor(R.color.purple_200));
+        startTV.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         playTV.setBackgroundColor(getResources().getColor(R.color.gray));
-        stopplayTV.setBackgroundColor(getResources().getColor(R.color.purple_200));
+        stopplayTV.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
         // for playing our recorded audio
         // we are using media player class.
@@ -222,9 +222,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void pauseRecording() {
         stopTV.setBackgroundColor(getResources().getColor(R.color.gray));
-        startTV.setBackgroundColor(getResources().getColor(R.color.purple_200));
-        playTV.setBackgroundColor(getResources().getColor(R.color.purple_200));
-        stopplayTV.setBackgroundColor(getResources().getColor(R.color.purple_200));
+        startTV.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        playTV.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        stopplayTV.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
         try {
 
@@ -250,8 +250,8 @@ public class MainActivity extends AppCompatActivity {
         mPlayer.release();
         mPlayer = null;
         stopTV.setBackgroundColor(getResources().getColor(R.color.gray));
-        startTV.setBackgroundColor(getResources().getColor(R.color.purple_200));
-        playTV.setBackgroundColor(getResources().getColor(R.color.purple_200));
+        startTV.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        playTV.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         stopplayTV.setBackgroundColor(getResources().getColor(R.color.gray));
         statusTV.setText("Recording Play Stopped");
     }

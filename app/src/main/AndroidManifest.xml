@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.mahmoudbashir.recorderapp">
-    <!-- Permission for recording audio and storage of audio in users device -->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -28,7 +27,13 @@
             </intent-filter>-->
         </activity>
         <activity android:name=".RecorderListActivity"/>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
     </application>
+
+    <!-- Permission for recording audio and storage of audio in users device -->
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage"
