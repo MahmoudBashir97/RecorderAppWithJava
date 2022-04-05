@@ -1,4 +1,4 @@
-package com.mahmoudbashir.recorderapp;
+package com.mahmoudbashir.recorderapp.ui;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.mahmoudbashir.recorderapp.R;
 import com.mahmoudbashir.recorderapp.adapters.AudioListAdapter;
 import com.mahmoudbashir.recorderapp.model.AudioModel;
 import com.mahmoudbashir.recorderapp.viewModel.ViewModel;

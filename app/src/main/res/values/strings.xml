@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RecorderAppWithJava</string>
+    <string name="app_name">My Reco</string>
     <string name="toggle_flash">Toggle Flash</string>
     <string name="action_settings">Settings</string>
     <string name="scanned_data">Scanned Data</string>

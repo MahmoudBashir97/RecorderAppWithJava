@@ -1,4 +1,4 @@
-package com.mahmoudbashir.recorderapp;
+package com.mahmoudbashir.recorderapp.ui;
 
 import android.Manifest;
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 
 import com.github.znacloud.RippleView;
+import com.mahmoudbashir.recorderapp.R;
 import com.mahmoudbashir.recorderapp.model.AudioModel;
 import com.mahmoudbashir.recorderapp.viewModel.ViewModel;
 
